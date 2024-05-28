@@ -1,0 +1,1 @@
+from .game_views import TreasureViewSet, PlayerTreasureViewSet, LeaderboardViewSet

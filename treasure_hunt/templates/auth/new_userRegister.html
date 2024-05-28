@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New User Register</title>
+</head>
+<body style="font-family: 'Poppins', sans-serif; margin: 0; padding: 0;">
+    <div style="max-width: 600px; margin: auto; background-color: {{primary_color}};">
+        <div style="text-align: center; padding-top: 13px;">
+            <!-- DYNAMIC LOGO IMAGE WILL BE PLACED IN SOURCE ATTRIBUTE -->
+            <img style="width: auto; max-width: 200px;" src="{{company_logo}}" alt="Logo" />
+        </div>
+        <div style="padding: 0 25px;">
+            <h2 style="font-family: 'Montserrat', sans-serif; text-align: center; font-size: 25px; text-transform: uppercase;">New User Register</h2>
+            <p style="font-size: 13px; text-align: center;">Dear {{username}},<br>Welcome to {{company_name}}! We're excited to have you as a new member of our community. To get started, please complete your registration by verifying your email address.</p>
+            <a href="{{button}}" target="_blank" style="text-decoration: none;">
+                <button type="button" style="background-color: {{button_color}}; color: {{text_border}}; padding: 8px 10px; border-radius: 20px; border: none; cursor: pointer;">Confirm Email Verification</button>
+            </a>
+        </div>
+        <div style="text-align: center; padding: 14px; background-color: {{primary_color}};">
+            <p style="font-size: 13px; color: white;">{{starting_year}} {{company_name}}. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
