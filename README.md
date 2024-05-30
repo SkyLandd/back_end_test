@@ -1,13 +1,13 @@
 # Game Backend Test
 
 ## Objective
-To assess your backend development skills relevant to game development.
+To assess your backend development skills relevant to game development using Node.js.
 
 ## Background Story
 Welcome to "Treasure Hunt," an exciting new mobile game where players embark on adventures to collect hidden treasures. As the backend developer, your task is to build a secure and efficient backend system to handle user authentication, manage game data, and implement complex game logic to ensure a seamless and competitive gaming experience.
 
 ## Instructions
-Complete the following tasks. Push your solutions to this repository. Ensure your code is well-commented and organized.
+Complete the following tasks using Node.js. Push your solutions to this repository. Ensure your code is well-commented and organized.
 
 ### Task 1: User Authentication and Game Data Management
 
@@ -29,7 +29,7 @@ Complete the following tasks. Push your solutions to this repository. Ensure you
     - Implement a system to track and prevent cheating, such as treasure duplication or manipulation.
 
 **Requirements:**
-- Use a web framework of your choice (e.g., Flask, Express, Django).
+- Use a Node.js framework of your choice (e.g., Express).
 - Use a database (e.g., PostgreSQL, MongoDB) to store user and game data.
 - Ensure endpoints are secure and only accessible by authenticated users.
 - Design the database schema to support scalability and performance.
@@ -69,4 +69,4 @@ Complete the following tasks. Push your solutions to this repository. Ensure you
 
 Good luck! We look forward to reviewing your submission.
 
-## DeadLine : 28/06/2024
+**Deadline: 02/06/2024.**
