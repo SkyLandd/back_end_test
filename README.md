@@ -69,4 +69,4 @@ Complete the following tasks using Node.js. Push your solutions to this reposito
 
 Good luck! We look forward to reviewing your submission.
 
-**Deadline: 02/06/2024.**
+**Deadline: 06/06/2024.**
