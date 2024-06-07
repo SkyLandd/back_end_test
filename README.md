@@ -1,7 +1,7 @@
 # Game Backend Test
 
 ## Objective
-To assess your backend development skills relevant to game development using Node.js.
+To assess your backend development skills relevant to game development using Node.js...
 
 ## Background Story
 Welcome to "Treasure Hunt," an exciting new mobile game where players embark on adventures to collect hidden treasures. As the backend developer, your task is to build a secure and efficient backend system to handle user authentication, manage game data, and implement complex game logic to ensure a seamless and competitive gaming experience.
