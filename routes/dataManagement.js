@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const User = require('../models/user');
 const Log = require('../models/log');
+const NodeCache = require('node-cache');
 
 // Middleware to reset daily/weekly limits
 const resetLimits = (user) => {
@@ -67,13 +68,19 @@ router.put('/collect', auth, async (req, res) => {
     }
 });
 
+const myCache = new NodeCache({ stdTTL: 600 }); // Cache for 10 minutes
+
 router.get('/stats', auth, async (req, res) => {
     try {
-        const user = await User.findById(req.user.id).select('treasures');
-        if (!user) {
-            return res.status(404).json({ msg: 'User not found' });
+        let userStats = myCache.get(`stats_${req.user.id}`);
+        if (!userStats) {
+            userStats = await User.findById(req.user.id).select('-password -__v -verificationToken');
+            if (!userStats) {
+                return res.status(404).json({ msg: 'User not found' });
+            }
+            myCache.set(`stats_${req.user.id}`, userStats);
         }
-        res.json(user);
+        res.json(userStats);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
@@ -82,7 +89,16 @@ router.get('/stats', auth, async (req, res) => {
 
 router.get('/leaderboard', async (req, res) => {
     try {
-        const topPlayers = await User.find().sort({ treasures: -1 }).limit(10).select('name treasures');
+        let topPlayers = myCache.get('leaderboard');
+        if (!topPlayers) {
+            topPlayers = await User.find().sort({ treasures: -1 }).limit(10).select('name treasures');
+            myCache.set('leaderboard', topPlayers);
+            
+            console.log('Fetching leaderboard from database');
+            
+        }else{
+            console.log('leaderboard cached');
+        }
         res.json(topPlayers);
     } catch (err) {
         console.error(err.message);
