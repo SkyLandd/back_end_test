@@ -6,6 +6,7 @@ const dataManagementRouts = require('./routes/dataManagement');
 const morgan = require('morgan');
 const winston = require('winston');
 const expressWinston = require('express-winston');
+const promBundle = require("express-prom-bundle");
 
 dotenv.config();
 const app = express();
@@ -40,6 +41,19 @@ app.use(expressWinston.logger({
 app.use(expressWinston.errorLogger({
     winstonInstance: logger
 }));
+
+const metricsMiddleware = promBundle({
+    includeMethod: true,  // include HTTP method in the metrics
+    includePath: true,    // include URL path in the metrics
+    includeUp: true,      // include the "up" metric (is the server up?)
+    promClient: {
+        collectDefaultMetrics: {
+            timeout: 10000 // collect default metrics every 10 seconds
+        }
+    }
+});
+
+app.use(metricsMiddleware);
 
 // Connect to the database
 connectDB();
