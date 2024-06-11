@@ -1,146 +1,86 @@
-# Game Backend Test
+# Introduction
 
-## Objective
-To assess your backend development skills relevant to game development using Node.js.
+This project is a backend system for a game using Node.js, Express, and Prisma with PostgreSQL. It supports running with Docker or directly on your local system.
 
-## Background Story
-Welcome to "Treasure Hunt," an exciting new mobile game where players embark on adventures to collect hidden treasures. As the backend developer, your task is to build a secure and efficient backend system to handle user authentication, manage game data, and implement complex game logic to ensure a seamless and competitive gaming experience.
+## Getting Started
+### General Steps
+1. Clone the repository:
+   ```
+   git clone https://github.com/NastaranShabani/back_end_test.git
+   ```
 
-## Instructions
-Complete the following tasks using Node.js. Push your solutions to this repository. Ensure your code is well-commented and organized.
+2. Navigate to the project root directory:
+   ```
+   cd back_end_test
+   ```
+### 1. Running with Docker
+### Prerequisites
+Make sure Docker is installed on your system.
+### Steps
 
-### Task 1: User Authentication and Game Data Management
+3. Run the project:
+   ```
+   make run
+   ```
+All docker containers should be up and running and there is no need for further steps
+### 2. Running Locally Without Docker
+### Prerequisites
+Make sure PostgreSQL is installed on your system.
+Install the latest version of Node.js, npm, and npx. You can install Node.js from the official website, which includes npm and npx.
+### Steps
+3. Install the dependencies:
 
-**Objective:** Implement a secure user authentication system and manage game data with advanced game logic.
+    ```sh
+    npm install
+    ```
+4. Create a PostgreSQL database on your local system.
 
-1. **User Authentication:**
-    - Create an endpoint for user registration.
-    - Create an endpoint for user login.
-    - Secure the endpoints using JWT (JSON Web Token).
-    - Hash passwords before storing them in the database.
-    - Implement email verification for new users.
+5. Copy the example environment file and update it with your database credentials:
 
-2. **Game Data Management:**
-    - Create an endpoint for players to collect treasures and store them in the database.
-    - Create an endpoint to retrieve a player's statistics, including the number of treasures collected.
-    - Create an endpoint to retrieve a leaderboard showing the top players based on the number of treasures collected.
-    - Implement logic to handle daily and weekly treasure collection limits.
-    - Implement an endpoint for players to trade treasures with each other, ensuring transactions are secure and atomic.
-    - Implement a system to track and prevent cheating, such as treasure duplication or manipulation.
-
-**Requirements:**
-- Use a Node.js framework of your choice (e.g., Express).
-- Use a database (e.g., PostgreSQL, MongoDB) to store user and game data.
-- Ensure endpoints are secure and only accessible by authenticated users.
-- Design the database schema to support scalability and performance.
-
-### Task 2: Performance Monitoring and Optimization
-
-**Objective:** Implement advanced performance monitoring and optimization techniques.
-
-1. **Logging and Monitoring:**
-    - Set up logging for API requests and responses.
-    - Implement detailed monitoring to track server performance metrics (e.g., response time, error rate, database query performance).
-    - Implement alerting for critical issues such as downtime or high error rates.
-
-2. **Optimization:**
-    - Identify potential bottlenecks in your API and suggest optimizations.
-    - Implement caching for frequently accessed data, such as the leaderboard and player statistics.
-    - Optimize database queries to improve performance, especially for complex operations like treasure trading.
-    - Provide a detailed report on identified bottlenecks and implemented optimizations, including before-and-after performance metrics.
-
-**Requirements:**
-- Use tools like Prometheus, Grafana, or similar for monitoring and alerting.
-- Ensure the system can handle high concurrency and large volumes of data efficiently.
-
-### Submission
-
-- **Push your work to this repository.**
-
-## Evaluation Criteria
-
-- Correctness and functionality of the implemented features.
-- Code quality and organization.
-- Documentation clarity and completeness.
-- Performance and scalability considerations.
-- Security measures implemented.
-- Advanced game logic implementation.
-- Ability to handle complex backend requirements.
-
-
-# Contributing to SkyLandd Backend Test
-
-We welcome contributions from everyone! If you are not a collaborator but would like to contribute to this project, please follow these steps to fork the repository and submit a pull request:
-
-## 1. Fork the Repository
-
-1. Navigate to the main page of the repository.
-2. Click the `Fork` button at the top right corner of the page.
-3. This will create a copy of the repository in your GitHub account.
-
-## 2. Clone Your Fork
-
-1. Open your terminal or command prompt.
-2. Clone your forked repository to your local machine using the following command:
-
-    ```bash
-    git clone https://github.com/your-username/back_end_test.git
+    ```sh
+    cp .env.example .env
     ```
 
-3. Change into the repository directory:
+    Update the content of the `.env` file based on your recently created database credentials. Set HOST=localhost 
+ 
 
-    ```bash
-    cd back_end_test
+6. Generate Prisma client:
+
+    ```sh
+    npx prisma generate
     ```
 
-## 3. Create a New Branch
+7. Apply database migrations:
 
-1. Create a new branch for your changes:
-
-    ```bash
-    git checkout -b your-branch-name
+    ```sh
+    npx prisma migrate dev --name init
+    npx prisma migrate deploy
     ```
 
-## 4. Make Changes and Commit
+8. Start the project:
 
-1. Make your desired changes to the code.
-2. Stage the changes for commit:
-
-    ```bash
-    git add .
+    ```sh
+    npm start
     ```
+## Postman Collection
 
-3. Commit the changes with a descriptive message:
+You can find the Postman collection in the `postmanCollection/` directory.
 
-    ```bash
-    git commit -m "Description of the changes"
-    ```
+### Initial Setup **(Necessary)**
 
-## 5. Push Changes to Your Fork
+1. Send a GET request to `/insertTreasure` to create the game treasures.
 
-1. Push your changes to your forked repository on GitHub:
+## Additional Information
 
-    ```bash
-    git push origin your-branch-name
-    ```
+### Environment Variables
 
-## 6. Create a Pull Request
+Ensure that your `.env` file is correctly set up with the following variables:
 
-1. Navigate to the original repository (the one you forked from).
-2. Click on the `Pull requests` tab.
-3. Click the `New pull request` button.
-4. Select the branch you just pushed to your forked repository.
-5. Fill in the details of the pull request, providing a clear title and description of your changes.
-6. Click `Create pull request`.
+```env
+HOST=db
+DATABASE=your_database_name
+DB_USER=your_database_user
+DB_PASS=your_database_password
+DATABASE_URL=postgresql://your_database_user:your_database_password@db:5432/your_database_name
+PORT=8000
 
-## 7. Wait for Review
-
-Your pull request will be reviewed by the repository maintainers. You may be asked to make additional changes before it can be merged.
-
-Thank you for contributing!
-
-
-
-Good luck! We look forward to reviewing your submission.
-
-**Deadline: 15/06/2024.**

@@ -1,0 +1,9 @@
+# dependencies
+/node_modules
+/.env
+
+# Ignore Prisma migration files
+/prisma/migrations
+
+
+
