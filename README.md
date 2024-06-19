@@ -143,4 +143,4 @@ Thank you for contributing!
 
 Good luck! We look forward to reviewing your submission.
 
-**Deadline: 15/06/2024.**
+**Deadline: 25/06/2024.**
