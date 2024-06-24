@@ -1,0 +1,101 @@
+version: "3.9"
+
+services:
+  # Postgres database service
+  postgres:
+    image: postgres:14.6
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: game_database
+    ports:
+      - "5433:5432"
+    volumes:
+      - game_postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - postgres
+      - game-test
+
+  # pgAdmin web interface for managing Postgres
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    ports:
+      - "8081:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    links:
+      - postgres:postgres
+    volumes:
+      - game_pgadmindata:/root/.pgadmin
+      - game_pgadminlibdata:/var/lib/pgadmin
+    networks:
+      - postgres
+      - game-test
+
+  # Redis service for caching
+  redis:
+    image: redis:latest
+    ports:
+      - "6380:6379"
+    volumes:
+      - game_redis_data:/data
+    networks:
+      - game-test
+
+  # game_app_backend:
+  #   container_name: game_app
+  #   image: game_app
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: .
+  #   ports:
+  #     - 3081:3081
+  #   networks:
+  #     - game-test
+  #   environment:
+  #     - TYPEORM_HOST=postgres
+  #     - TYPEORM_PORT=5432
+  #     - REDIS_HOST=redis
+  #     - REDIS_PORT=6379
+  #   volumes:
+  #     - game_app_data:/home/node/app/
+  #   depends_on:
+  #     - postgres
+  #     - redis
+
+  # migration:
+  #   build:
+  #     context: .
+  #   command:
+  #     [ "npm", "run", "migrate" ]
+  #   links:
+  #     - postgres
+  #   depends_on:
+  #     - postgres
+  #     - game_app_backend
+  #   networks:
+  #     - game-test
+  #   environment:
+  #     - TYPEORM_HOST=postgres
+  #     - TYPEORM_PORT=5432
+
+# Volumes to persist data
+volumes:
+  game_postgres_data: 
+    driver: local
+  game_pgadmindata: 
+    driver: local
+  game_pgadminlibdata: 
+    driver: local
+  game_redis_data: 
+    driver: local
+  game_app_data:
+    driver: local
+
+networks:
+  postgres:
+    driver: bridge
+  game-test:
+    driver: bridge
