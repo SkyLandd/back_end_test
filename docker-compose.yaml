@@ -44,42 +44,42 @@ services:
     networks:
       - game-test
 
-  # game_app_backend:
-  #   container_name: game_app
-  #   image: game_app
-  #   build:
-  #     dockerfile: Dockerfile
-  #     context: .
-  #   ports:
-  #     - 3081:3081
-  #   networks:
-  #     - game-test
-  #   environment:
-  #     - TYPEORM_HOST=postgres
-  #     - TYPEORM_PORT=5432
-  #     - REDIS_HOST=redis
-  #     - REDIS_PORT=6379
-  #   volumes:
-  #     - game_app_data:/home/node/app/
-  #   depends_on:
-  #     - postgres
-  #     - redis
+  game_app_backend:
+    container_name: game_app
+    image: game_app
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - 3081:3081
+    networks:
+      - game-test
+    environment:
+      - TYPEORM_HOST=postgres
+      - TYPEORM_PORT=5432
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - game_app_data:/home/node/app/
+    depends_on:
+      - postgres
+      - redis
 
-  # migration:
-  #   build:
-  #     context: .
-  #   command:
-  #     [ "npm", "run", "migrate" ]
-  #   links:
-  #     - postgres
-  #   depends_on:
-  #     - postgres
-  #     - game_app_backend
-  #   networks:
-  #     - game-test
-  #   environment:
-  #     - TYPEORM_HOST=postgres
-  #     - TYPEORM_PORT=5432
+  migration:
+    build:
+      context: .
+    command:
+      [ "npm", "run", "migrate" ]
+    links:
+      - postgres
+    depends_on:
+      - postgres
+      - game_app_backend
+    networks:
+      - game-test
+    environment:
+      - TYPEORM_HOST=postgres
+      - TYPEORM_PORT=5432
 
 # Volumes to persist data
 volumes:
