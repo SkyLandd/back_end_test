@@ -1,7 +1,7 @@
 import { IsOptional, IsString } from 'class-validator';
 import { Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-export abstract class BaseEntity {
+export abstract class CustomBaseEntity {
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp with time zone',
