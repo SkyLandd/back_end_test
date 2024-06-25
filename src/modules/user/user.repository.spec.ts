@@ -3,6 +3,7 @@ import { UserRepository } from './user.repository';
 import { TypeOrmModule, getRepositoryToken } from '@nestjs/typeorm';
 import { ormConfig } from '@config/orm.config';
 import { UserEntity } from '@database/entities/user.entity';
+import { RegisterUserDto } from '@common/dtos/user.dto';
 
 describe('UserRepository', () => {
   let repository: UserRepository;
@@ -73,6 +74,45 @@ describe('UserRepository', () => {
       expect(foundUser).toBeDefined()
       expect(foundUser).toBeInstanceOf(UserEntity);
       expect(foundUser.id).toBe(savedUser.id);
+    })
+  })
+
+  describe('exists', () => {
+    let userEntity: UserEntity;
+    let registerDto: RegisterUserDto;
+
+    beforeEach(async () => {
+      userEntity = new UserEntity();
+      userEntity.email = 'email@email.com';
+      userEntity.handle = 'unique';
+      userEntity.password = 'jasjasjhsajhassaghhjgsafgsag';
+      await repository.saveOne(userEntity);
+
+      registerDto = new RegisterUserDto()
+    })
+
+    it('check same email exists', async () => {
+      registerDto.email = userEntity.email;
+      registerDto.handle = 'different';
+      const exists = await repository.exists(registerDto)
+
+      expect(exists).toBe(true)
+    })
+
+    it('check same handle exists', async () => {
+      registerDto.email = 'different@email.com';
+      registerDto.handle = userEntity.handle;
+      const exists = await repository.exists(registerDto)
+
+      expect(exists).toBe(true)
+    })
+
+    it('check when handle and email does not exists', async () => {
+      registerDto.email = 'different@email.com';
+      registerDto.handle = 'different';
+      const exists = await repository.exists(registerDto)
+
+      expect(exists).toBe(false)
     })
   })
 });
