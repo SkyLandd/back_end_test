@@ -2,6 +2,7 @@ import { IUser, RegisterUserDto } from '@common/dtos/user.dto';
 import { BadRequestException, ConflictException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { UserRepository } from '../repository/user.repository';
 import { UserMapper } from '../user.mapper';
+import { UserEntity } from '@database/entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -57,12 +58,12 @@ export class UserService {
    * @returns IUser
    * @throws NotFoundException if user with passed param does not exist
    */
-  public async getOneOrThrow(filter: { id?: string, email?: string }) {
+  public async getOneOrThrow(filter: { id?: string, email?: string }, withPassword?: boolean): Promise<IUser | UserEntity> {
     const user = await this.userRepository.findOneBy(filter);
     if (!user) {
       throw new NotFoundException(`User with details not found`);
     }
 
-    return this.userMapper.toUser(user);
+    return withPassword ? user : this.userMapper.toUser(user);
   }
 }

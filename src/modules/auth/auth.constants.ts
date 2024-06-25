@@ -1,0 +1,5 @@
+export enum GrantType {
+  ACCESS = 'ACCESS',
+  REFRESH = 'REFRESH',
+  EMAIL_VERIFICATION = 'EMAIL_VERIFICATION',
+}

@@ -159,5 +159,41 @@ describe('UserService', () => {
       expect(exception).not.toBeDefined();
       expect(savedUser).toBeDefined();
     });
+
+    it('returns user with password if withPassword is true', async () => {
+      jest.spyOn(mockUserRepository, 'findOneBy').mockResolvedValue(userEntity)
+  
+      let savedUser: IUser;
+      let exception: any;
+
+      try {
+        savedUser = await service.getOneOrThrow({ email: registerUserDto.email }, true);
+      } catch(err) {
+        exception = err;
+      }
+
+      expect(mockUserRepository.findOneBy).toHaveBeenCalled();
+      expect(exception).not.toBeDefined();
+      expect(savedUser).toBeDefined();
+      expect(savedUser).toHaveProperty('password');
+    });
+
+    it('returns user with password if withPassword is not set', async () => {
+      jest.spyOn(mockUserRepository, 'findOneBy').mockResolvedValue(userEntity)
+  
+      let savedUser: IUser;
+      let exception: any;
+
+      try {
+        savedUser = await service.getOneOrThrow({ email: registerUserDto.email });
+      } catch(err) {
+        exception = err;
+      }
+
+      expect(mockUserRepository.findOneBy).toHaveBeenCalled();
+      expect(exception).not.toBeDefined();
+      expect(savedUser).toBeDefined();
+      expect(savedUser).not.toHaveProperty('password');
+    });
   })
 });
