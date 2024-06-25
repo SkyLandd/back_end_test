@@ -49,6 +49,12 @@ High Level Architecture and components
 
 ---
 
+### High Level Db Schema:
+<img src="Db Schema.png" width="492" height="228" alt="Db Schema">
+
+High Level Db Schema (In Progress)
+---
+
 ### Endpoints:
 
 ### 1. Authentication Module/Service
