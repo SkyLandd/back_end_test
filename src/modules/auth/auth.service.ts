@@ -1,12 +1,13 @@
 import * as argon2 from 'argon2';
 import { IUser, LoginUserDto, RegisterUserDto } from '@common/dtos/user.dto';
 import { UserService } from '@modules/user/service/user.service';
-import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UserEntity } from '@database/entities/user.entity';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UnknownException } from '@common/exceptions/Unknown.exception';
 import { GrantType } from './auth.constants';
+import { IGrantPayload } from '@common/interfaces/IGrantPayload';
 
 @Injectable()
 export class AuthService {
@@ -80,7 +81,7 @@ export class AuthService {
   }
 
   private generateToken(grantType: GrantType, user: IUser) {
-    const grantPayload = {
+    const grantPayload: IGrantPayload = {
       id: user.id,
       email: user.email,
       handle: user.handle
@@ -123,5 +124,17 @@ export class AuthService {
         );
     }
     return jwtSignOptions;
+  }
+
+  public validateGrantToken(grantType: GrantType, token: string, payload: IGrantPayload) {
+    // Get token from cache
+    const cacheKey = `${grantType}:${payload.id}`;
+    const storedToken = token;
+
+    if (storedToken !== cacheKey) {
+      throw new UnauthorizedException();
+    }
+
+    return payload;
   }
 }
