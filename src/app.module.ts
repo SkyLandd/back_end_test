@@ -8,6 +8,7 @@ import { DataSource } from 'typeorm';
 import { TerminusModule } from '@nestjs/terminus';
 import { HttpModule } from '@nestjs/axios';
 import { UserModule } from '@modules/user/user.module';
+import { AuthModule } from '@modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { UserModule } from '@modules/user/user.module';
     TerminusModule,
     HttpModule,
     UserModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
