@@ -7,6 +7,7 @@ import { defaultConnection } from './config/typeorm.config';
 import { DataSource } from 'typeorm';
 import { TerminusModule } from '@nestjs/terminus';
 import { HttpModule } from '@nestjs/axios';
+import { UserModule } from '@modules/user/user.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { HttpModule } from '@nestjs/axios';
     }),
     TerminusModule,
     HttpModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

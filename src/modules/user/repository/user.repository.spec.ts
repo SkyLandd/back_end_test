@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserRepository } from './user.repository';
 import { TypeOrmModule, getRepositoryToken } from '@nestjs/typeorm';
 import { ormConfig } from '@config/orm.config';
 import { UserEntity } from '@database/entities/user.entity';
 import { RegisterUserDto } from '@common/dtos/user.dto';
+import { UserRepository } from './user.repository';
 
 describe('UserRepository', () => {
   let repository: UserRepository;
