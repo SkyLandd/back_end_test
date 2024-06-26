@@ -73,4 +73,9 @@ export class TreasureDistributionService {
       throw new BadRequestException(`Manipulation: Trying to collect treasure which does not exist`);
     }
   }
+
+  public async removeTreasure(treasureId: string, sessionId: string,) {
+    const cacheKey = this.getCacheKey(treasureId, sessionId);
+    await this.cache.del(cacheKey);
+  }
 }
