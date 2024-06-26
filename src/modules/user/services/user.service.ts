@@ -4,12 +4,16 @@ import { UserRepository } from '../repositories/user.repository';
 import { UserMapper } from '../user.mapper';
 import { UserEntity } from '@database/entities/user.entity';
 import { IGrantPayload } from '@common/interfaces/IGrantPayload';
+import { UserInventoryRepository } from '../repositories/user-inventory.repository';
+import { EntityManager } from 'typeorm';
+import { CollectTreasureDto } from '@modules/game/dtos/treasure-collect.dto';
 
 @Injectable()
 export class UserService {
   constructor(
     private userRepository: UserRepository,
     private userMapper: UserMapper,
+    private userInventoryRepository: UserInventoryRepository,
   ) {}
 
   private getLogContext(name: string) {
@@ -68,10 +72,33 @@ export class UserService {
     return withPassword ? user : this.userMapper.toUser(user);
   }
 
+  /**
+   * Updates email verification for user
+   * 
+   * @param user 
+   */
   public async updateEmailVerified(user: IGrantPayload) {
     const userToUpdate = new UserEntity();
     userToUpdate.id = user.id;
     userToUpdate.emailVerified = true;
     await this.userRepository.saveOne(userToUpdate);
   }
+
+  /**
+   * Add treasure to user inventory
+   * 
+   * @param user 
+   * @param treasureId 
+   */
+  public async addTreasure(user: IGrantPayload, treasureDto: CollectTreasureDto, transactionManager: EntityManager) {
+    await this.userInventoryRepository.saveTreasure(
+      this.userMapper.toUserInventory(user, treasureDto),
+      transactionManager
+    )
+  }
+
+  public getInventoryTransactionManager() {
+    return this.userInventoryRepository.getManager();
+  }
+
 }

@@ -43,15 +43,18 @@ export class TreasureDistributionService {
     const radiusInMetre = 20000; // 20 km
     const treasureTTL = 10*60*1000; // 10 mins
 
+    const sessionTreasures = [];
     for(let treasure of treasures) {
       const randomPosition = this.getRandomCoordinatesNearPoint(centrePosition, radiusInMetre);
       const cacheKey = this.getCacheKey(treasure.id, sessionId);
       const storedTreasure: IStoredTreasure = {
         treasure, position: randomPosition
       }
+      sessionTreasures.push(storedTreasure);
       await this.cache.set(cacheKey, storedTreasure, treasureTTL);
     }
 
+    return sessionTreasures;
   }
 
   public async isValidTreasure(treasureId: string, sessionId: string, position: GameCoordinatesDto) {

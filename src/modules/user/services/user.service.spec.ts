@@ -7,6 +7,7 @@ import { UserRepository } from '../repositories/user.repository';
 import { UserMapper } from '../user.mapper';
 import { UserEntity } from '@database/entities/user.entity';
 import { BadRequestException, ConflictException, Logger, NotFoundException } from '@nestjs/common';
+import { UserInventoryRepository } from '../repositories/user-inventory.repository';
 
 describe('UserService', () => {
   let service: UserService;
@@ -23,6 +24,8 @@ describe('UserService', () => {
           saveOne: jest.fn,
           exists: jest.fn
         }
+      } else if (token === UserInventoryRepository) {
+        return { }
       }
     })
     .compile();

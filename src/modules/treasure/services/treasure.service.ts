@@ -18,7 +18,7 @@ export class TreasureService {
     return this.treasureRepo.findOneBy(filter);
   }
 
-  public async findBulkBy(filter: { type?: TreasureType, ids?: string[] }) {
+  public async findBulkBy(filter: { types?: TreasureType[], ids?: string[] }) {
     return this.treasureRepo.findBulkBy(filter);
   }
 

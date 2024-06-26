@@ -10,6 +10,7 @@ import { HttpModule } from '@nestjs/axios';
 import { UserModule } from '@modules/user/user.module';
 import { AuthModule } from '@modules/auth/auth.module';
 import { TreasureModule } from './modules/treasure/treasure.module';
+import { GameModule } from '@modules/game/game.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { TreasureModule } from './modules/treasure/treasure.module';
     UserModule,
     AuthModule,
     TreasureModule,
+    GameModule,
   ],
   controllers: [AppController],
   providers: [AppService],

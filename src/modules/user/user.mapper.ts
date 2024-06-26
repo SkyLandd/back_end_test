@@ -1,5 +1,8 @@
 import { IUser, RegisterUserDto } from "@common/dtos/user.dto";
+import { IGrantPayload } from "@common/interfaces/IGrantPayload";
+import { UserInventoryEntity } from "@database/entities/user-inventory.entity";
 import { UserEntity } from "@database/entities/user.entity";
+import { CollectTreasureDto } from "@modules/game/dtos/treasure-collect.dto";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
@@ -25,5 +28,16 @@ export class UserMapper {
     };
 
     return user;
+  }
+
+  public toUserInventory(user: IGrantPayload, treasureDto: CollectTreasureDto) {
+    const userInventoryEntity = new UserInventoryEntity();
+
+    userInventoryEntity.treasureId = treasureDto.treasureId;
+    userInventoryEntity.position = treasureDto.treasurePosition;
+    userInventoryEntity.sessionId = treasureDto.sessionId;
+    userInventoryEntity.userId = user.id;
+
+    return userInventoryEntity;
   }
 }
