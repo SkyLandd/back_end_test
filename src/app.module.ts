@@ -9,6 +9,7 @@ import { TerminusModule } from '@nestjs/terminus';
 import { HttpModule } from '@nestjs/axios';
 import { UserModule } from '@modules/user/user.module';
 import { AuthModule } from '@modules/auth/auth.module';
+import { TreasureModule } from './modules/treasure/treasure.module';
 
 @Module({
   imports: [
@@ -25,7 +26,8 @@ import { AuthModule } from '@modules/auth/auth.module';
     TerminusModule,
     HttpModule,
     UserModule,
-    AuthModule
+    AuthModule,
+    TreasureModule,
   ],
   controllers: [AppController],
   providers: [AppService],

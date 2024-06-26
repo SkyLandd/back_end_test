@@ -27,9 +27,7 @@ describe('UserRepository', () => {
   afterEach(async () => {
     // Clean up the database after each test
     await module.get(getRepositoryToken(UserEntity)).clear();
-  });
 
-  afterAll(async () => {
     // Close the database connection after all tests
     await module.close();
   });
