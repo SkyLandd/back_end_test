@@ -3,6 +3,7 @@ import { BadRequestException, ConflictException, Injectable, Logger, NotFoundExc
 import { UserRepository } from '../repository/user.repository';
 import { UserMapper } from '../user.mapper';
 import { UserEntity } from '@database/entities/user.entity';
+import { IGrantPayload } from '@common/interfaces/IGrantPayload';
 
 @Injectable()
 export class UserService {
@@ -65,5 +66,12 @@ export class UserService {
     }
 
     return withPassword ? user : this.userMapper.toUser(user);
+  }
+
+  public async updateEmailVerified(user: IGrantPayload) {
+    const userToUpdate = new UserEntity();
+    userToUpdate.id = user.id;
+    userToUpdate.emailVerified = true;
+    await this.userRepository.saveOne(userToUpdate);
   }
 }

@@ -4,17 +4,22 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { UserService } from '@modules/user/service/user.service';
 import { IUser, LoginUserDto, RegisterUserDto } from '@common/dtos/user.dto';
-import { BadRequestException, ConflictException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UserEntity } from '@database/entities/user.entity';
 import { ConfigModule } from '@nestjs/config';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
+import { CustomCacheModule } from '@modules/cache/cache.module';
+import { GrantType } from './auth.constants';
+import { IGrantPayload } from '@common/interfaces/IGrantPayload';
 
 describe('AuthService', () => {
   let service: AuthService;
   let userServiceMock: UserService;
+  let cacheMock: Cache;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule.forRoot(), JwtModule],
+      imports: [ConfigModule.forRoot(), JwtModule, CustomCacheModule],
       providers: [AuthService],
     })
     .useMocker((token) => {
@@ -22,6 +27,13 @@ describe('AuthService', () => {
         return {
           register: jest.fn,
           getOneOrThrow: jest.fn,
+          updateEmailVerified: jest.fn
+        }
+      }
+      if (token === CACHE_MANAGER) {
+        return {
+          get: jest.fn,
+          set: jest.fn
         }
       }
     })
@@ -29,6 +41,7 @@ describe('AuthService', () => {
 
     service = module.get<AuthService>(AuthService);
     userServiceMock = module.get<UserService>(UserService);
+    cacheMock = module.get<Cache>(Cache);
   });
 
   it('should be defined', () => {
@@ -89,7 +102,7 @@ describe('AuthService', () => {
       expect(exception).toBeDefined();
       expect(exception).toBeInstanceOf(InternalServerErrorException);
     })
-  })
+  });
 
   describe('login', () => {
     let loginUserDto: LoginUserDto;
@@ -165,6 +178,139 @@ describe('AuthService', () => {
       expect(tokens).toBeDefined();
       expect(tokens.accessToken).toBeDefined();
       expect(tokens.refreshToken).toBeDefined();
+    })
+  });
+
+  describe('validateGrantToken', () => {
+    it('throw unauthorized if cached tokens don\'t match', async () => {
+      jest.spyOn(cacheMock, 'get').mockResolvedValue('differenttoken');
+      const payload = { id: 'id', email: 'email@email.com', handle: 'uniquehandle' }
+      let response: IGrantPayload;
+      let exception: any;
+
+      try {
+        response = await service.validateGrantToken(
+          GrantType.ACCESS, 
+          'expectedtoken', 
+          payload
+        )
+      } catch(err) {
+        exception = err;
+      }
+      
+      expect(response).not.toBeDefined();
+      expect(exception).toBeDefined();
+      expect(exception).toBeInstanceOf(UnauthorizedException);
+    })
+
+    it('return payload as response if tokens match', async () => {
+      jest.spyOn(cacheMock, 'get').mockResolvedValue('expectedtoken');
+      const payload = { id: 'id', email: 'email@email.com', handle: 'uniquehandle' }
+      let response: IGrantPayload;
+      let exception: any;
+
+      try {
+        response = await service.validateGrantToken(
+          GrantType.ACCESS, 
+          'expectedtoken', 
+          payload
+        )
+      } catch(err) {
+        exception = err;
+      }
+      
+      expect(response).toBeDefined();
+      expect(exception).not.toBeDefined();
+    })
+
+    it('throw internal server exception if something unknown happens', async () => {
+      jest.spyOn(cacheMock, 'get').mockRejectedValue(new Error());
+      const payload = { id: 'id', email: 'email@email.com', handle: 'uniquehandle' }
+      let response: IGrantPayload;
+      let exception: any;
+
+      try {
+        response = await service.validateGrantToken(
+          GrantType.ACCESS, 
+          'expectedtoken', 
+          payload
+        )
+      } catch(err) {
+        exception = err;
+      }
+      
+      expect(response).not.toBeDefined();
+      expect(exception).toBeDefined();
+      expect(exception).toBeInstanceOf(InternalServerErrorException);
+    })
+  })
+
+  describe('sendVerificationEmail', () => {
+    it('save token in cache', async () => {
+      const cacheSpy = jest.spyOn(cacheMock, 'set');
+      const payload = { id: 'id', email: 'email@email.com', handle: 'uniquehandle' }
+      
+      await service.sendVerificationEmail(payload);
+
+      expect(cacheSpy).toHaveBeenCalled();
+    })
+  })
+
+  describe('verifyEmail', () => {
+    it('throw unauthorized if cached tokens don\'t match', async () => {
+      jest.spyOn(cacheMock, 'get').mockResolvedValue('differenttoken');
+      const payload = { id: 'id', email: 'email@email.com', handle: 'uniquehandle' }
+      let exception: any;
+
+      try {
+        await service.verifyEmail(
+          payload,
+          'expectedtoken'
+        )
+      } catch(err) {
+        exception = err;
+      }
+      
+      expect(exception).toBeDefined();
+      expect(exception).toBeInstanceOf(UnauthorizedException);
+    })
+
+    it('should not throw unauthorized excpetion if cached tokens match', async () => {
+      jest.spyOn(cacheMock, 'get').mockResolvedValue('expectedtoken');
+      jest.spyOn(userServiceMock, 'updateEmailVerified').mockResolvedValue();
+
+      const payload = { id: 'id', email: 'email@email.com', handle: 'uniquehandle' }
+      let exception: any;
+
+      try {
+        await service.verifyEmail(
+          payload,
+          'expectedtoken'
+        )
+      } catch(err) {
+        exception = err;
+      }
+      
+      expect(exception).not.toBeDefined();
+    })
+
+    it('call updateEmailVerified if tokens match', async () => {
+      jest.spyOn(cacheMock, 'get').mockResolvedValue('expectedtoken');
+      jest.spyOn(userServiceMock, 'updateEmailVerified').mockResolvedValue();
+
+      const payload = { id: 'id', email: 'email@email.com', handle: 'uniquehandle' }
+      let exception: any;
+
+      try {
+        await service.verifyEmail(
+          payload,
+          'expectedtoken'
+        )
+      } catch(err) {
+        exception = err;
+      }
+      
+      expect(userServiceMock.updateEmailVerified).toHaveBeenCalled();
     })
   })
 });
