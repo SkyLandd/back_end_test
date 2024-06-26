@@ -25,4 +25,8 @@ export class TreasureService {
   public async findSettingBy(filter: { type: TreasureSettingType }) {
     return this.treasureSettingRepo.findOneBy(filter);
   }
+
+  public async findBulkSettingBy(filter: { types: TreasureSettingType[] }) {
+    return this.treasureSettingRepo.findBulkBy(filter);
+  }
 }
