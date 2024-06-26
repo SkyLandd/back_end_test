@@ -1,16 +1,16 @@
 import { hash } from 'argon2';
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthService } from './auth.service';
-import { UserService } from '@modules/user/service/user.service';
+import { UserService } from '@modules/user/services/user.service';
 import { IUser, LoginUserDto, RegisterUserDto } from '@common/dtos/user.dto';
 import { BadRequestException, ConflictException, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UserEntity } from '@database/entities/user.entity';
 import { ConfigModule } from '@nestjs/config';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import { CustomCacheModule } from '@modules/cache/cache.module';
-import { GrantType } from './auth.constants';
+import { GrantType } from '../constants/grant-type.constant';
 import { IGrantPayload } from '@common/interfaces/IGrantPayload';
+import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
   let service: AuthService;

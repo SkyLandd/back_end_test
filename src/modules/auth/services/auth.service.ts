@@ -1,13 +1,13 @@
 import * as argon2 from 'argon2';
 import ms, { StringValue } from 'ms';
 import { IUser, LoginUserDto, RegisterUserDto } from '@common/dtos/user.dto';
-import { UserService } from '@modules/user/service/user.service';
+import { UserService } from '@modules/user/services/user.service';
 import { BadRequestException, ConflictException, Inject, Injectable, InternalServerErrorException, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UserEntity } from '@database/entities/user.entity';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UnknownException } from '@common/exceptions/Unknown.exception';
-import { GrantType } from './auth.constants';
+import { GrantType } from '../constants/grant-type.constant';
 import { IGrantPayload } from '@common/interfaces/IGrantPayload';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 

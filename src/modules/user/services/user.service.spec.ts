@@ -3,7 +3,7 @@ import { hash } from 'argon2';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
 import { IUser, RegisterUserDto } from '@common/dtos/user.dto';
-import { UserRepository } from '../repository/user.repository';
+import { UserRepository } from '../repositories/user.repository';
 import { UserMapper } from '../user.mapper';
 import { UserEntity } from '@database/entities/user.entity';
 import { BadRequestException, ConflictException, Logger, NotFoundException } from '@nestjs/common';

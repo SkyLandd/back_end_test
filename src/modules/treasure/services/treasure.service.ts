@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { TreasureType } from "./treasure-type.enum";
-import { TreasureRepository } from "./repository/treasure.repository";
-import { TreasureSettingType } from "./treasure-setting-type.enum";
-import { TreasureSettingRepository } from "./repository/treasure-setting.repository";
+import { TreasureType } from "../enums/treasure-type.enum";
+import { TreasureRepository } from "../repositories/treasure.repository";
+import { TreasureSettingType } from "../enums/treasure-setting-type.enum";
+import { TreasureSettingRepository } from "../repositories/treasure-setting.repository";
 
 @Injectable()
 export class TreasureService {

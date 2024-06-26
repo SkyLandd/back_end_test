@@ -3,7 +3,7 @@ import { TypeOrmModule, getRepositoryToken } from '@nestjs/typeorm';
 import { ormConfig } from '@config/orm.config';
 import { TreasureSettingEntity } from '@database/entities/treasure-setting.entity';
 import { TreasureSettingRepository } from './treasure-setting.repository';
-import { TreasureSettingType } from '../treasure-setting-type.enum';
+import { TreasureSettingType } from '../enums/treasure-setting-type.enum';
 
 describe('TreasureSettingRepository', () => {
   let repository: TreasureSettingRepository;

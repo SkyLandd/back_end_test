@@ -1,12 +1,12 @@
 import { LoginUserDto, RegisterUserDto } from '@common/dtos/user.dto';
 import { Body, Controller, Post, Query, UseGuards } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { AuthService } from '../services/auth.service';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
-import { JwtGuard } from './guards/jwt.guard';
+import { JwtGuard } from '../guards/jwt.guard';
 import { IGrantPayload } from '@common/interfaces/IGrantPayload';
-import { User } from './decorators/grant-payload.decorator';
+import { User } from '../decorators/grant-payload.decorator';
 import { TOKEN_NAME } from '@common/constants/auth';
-import { VerifyEmailGuard } from './guards/verify-email.guard';
+import { VerifyEmailGuard } from '../guards/verify-email.guard';
 
 @Controller('auth')
 @ApiTags("Auth")

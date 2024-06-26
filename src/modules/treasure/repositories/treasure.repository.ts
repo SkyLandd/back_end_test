@@ -2,7 +2,7 @@ import { TreasureEntity } from "@database/entities/treasure.entity";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { FindOptionsWhere, In, Repository } from "typeorm";
-import { TreasureType } from "../treasure-type.enum";
+import { TreasureType } from "../enums/treasure-type.enum";
 
 @Injectable()
 export class TreasureRepository {

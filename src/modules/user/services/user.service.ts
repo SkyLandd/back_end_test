@@ -1,6 +1,6 @@
 import { IUser, RegisterUserDto } from '@common/dtos/user.dto';
 import { BadRequestException, ConflictException, Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { UserRepository } from '../repository/user.repository';
+import { UserRepository } from '../repositories/user.repository';
 import { UserMapper } from '../user.mapper';
 import { UserEntity } from '@database/entities/user.entity';
 import { IGrantPayload } from '@common/interfaces/IGrantPayload';

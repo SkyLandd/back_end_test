@@ -1,6 +1,6 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 import { CustomBaseEntity } from "./base.entity";
-import { TreasureType } from "@modules/treasure/treasure-type.enum";
+import { TreasureType } from "@modules/treasure/enums/treasure-type.enum";
 
 @Entity({ name: 'treasure' })
 export class TreasureEntity extends CustomBaseEntity {

@@ -2,7 +2,7 @@ import { TreasureSettingEntity } from "@database/entities/treasure-setting.entit
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { FindOptionsWhere, In, Repository } from "typeorm";
-import { TreasureSettingType } from "../treasure-setting-type.enum";
+import { TreasureSettingType } from "../enums/treasure-setting-type.enum";
 
 
 @Injectable()

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
-import { GrantType } from '../auth.constants';
+import { GrantType } from '../constants/grant-type.constant';
 import { IGrantPayload } from '@common/interfaces/IGrantPayload';
 
 @Injectable()
