@@ -6,13 +6,15 @@ import { JwtGuard } from "@modules/auth/guards/jwt.guard";
 import { User } from "@modules/auth/decorators/grant-payload.decorator";
 import { IGrantPayload } from "@common/interfaces/IGrantPayload";
 import { TradeTreasureDto } from "../dtos/trade-treasure.dto";
+import { UserStatisticsService } from "../services/user-statistics.service";
 
 @ApiTags('User')
 @Controller('user')
 @ApiSecurity(TOKEN_NAME)
 export class UserController {
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private userStatisticsService: UserStatisticsService
   ) { }
 
   @Post('/trade-treasure')
@@ -63,5 +65,13 @@ export class UserController {
     @Param('tradeId') tradeId: string
   ) {
     return this.userService.acceptTrade(tradeId, user);
+  }
+
+  @Get('/statistics')
+  @UseGuards(JwtGuard)
+  public async getUserStatistics(
+    @User() user: IGrantPayload,
+  ) {
+    return this.userStatisticsService.getStatistics(user);
   }
 }

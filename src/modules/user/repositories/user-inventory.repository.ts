@@ -1,7 +1,7 @@
 import { UserInventoryEntity } from "@database/entities/user-inventory.entity";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { EntityManager, FindOptionsWhere, Not, Repository } from "typeorm";
+import { EntityManager, FindOptionsWhere, IsNull, MoreThanOrEqual, Not, Repository } from "typeorm";
 import { InventoryStatus } from "../enums/inventory-status.enum";
 
 @Injectable()
@@ -55,5 +55,24 @@ export class UserInventoryRepository {
     transactionManager: EntityManager
   ) {
     return this.getRepo(transactionManager).save({ id, inventoryStatus: status });
+  }
+
+  public async countInventoryByStatus(userId: string): Promise<{ status: InventoryStatus, count: number }[]> {
+    const alias = 'userInventory';
+    const qb = this.getRepo().createQueryBuilder(alias);
+    qb.select(`${alias}.status`, 'status')
+      .addSelect(`COUNT(${alias}.id)`, 'count')
+      .where(`${alias}.userId = :userId`, { userId })
+      .groupBy(`${alias}.status`)
+    
+    return qb.getRawMany();
+  }
+
+  public async countInventoryByDate(userId: string, fromDate: Date) {
+    return this.getRepo().count({ where: { 
+      userId,
+      createdAt: MoreThanOrEqual(fromDate),
+      sessionId: Not(IsNull())
+    } })
   }
 }
