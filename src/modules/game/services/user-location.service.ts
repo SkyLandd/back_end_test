@@ -39,7 +39,7 @@ export class UserLocationService {
 
   private isPossibleDistanceJump(lastCollectedPosition: IStoredPosition, currentPosition: GameCoordinatesDto) {
     // Hardcoding the speed - Should be loaded from the map configuration
-    const permissibleSpeedInMetrePerSecond = 5;
+    const permissibleSpeedInMetrePerSecond = 1000;
     const elapsedTimeInMs = new Date().valueOf() - lastCollectedPosition.timestamp;
     
     const possibleDistance = permissibleSpeedInMetrePerSecond * (elapsedTimeInMs/1000)

@@ -39,4 +39,20 @@ export class UserController {
   ) {
     return this.userService.initiatedTrades(user);
   }
+
+  @Get('/trade-market')
+  @UseGuards(JwtGuard)
+  public async getTradeMarket(
+    @User() user: IGrantPayload,
+  ) {
+    return this.userService.getTradeMarket(user);
+  }
+
+  @Get('/treasures')
+  @UseGuards(JwtGuard)
+  public async getTreasures(
+    @User() user: IGrantPayload,
+  ) {
+    return this.userService.getTreasures(user);
+  }
 }

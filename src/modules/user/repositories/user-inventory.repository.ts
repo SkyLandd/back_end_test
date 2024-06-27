@@ -1,7 +1,7 @@
 import { UserInventoryEntity } from "@database/entities/user-inventory.entity";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { EntityManager, FindOptionsWhere, Repository } from "typeorm";
+import { EntityManager, FindOptionsWhere, Not, Repository } from "typeorm";
 import { InventoryStatus } from "../enums/inventory-status.enum";
 
 @Injectable()
@@ -33,11 +33,29 @@ export class UserInventoryRepository {
     return this.getRepo(transactionManager).findOne({ where: findWhereOptions });
   }
 
+  public async findBulkInventory(filter: { 
+    userId: string,
+    self?: boolean
+  }, transactionManager?: EntityManager) {
+    const findWhereOptions: FindOptionsWhere<UserInventoryEntity> = { }
+    if (filter.self) {
+      findWhereOptions.userId = filter.userId;
+    } else {
+      findWhereOptions.userId = Not(filter.userId);
+    }
+
+    if (!filter.self) {
+      findWhereOptions.inventoryStatus = InventoryStatus.COLLECTED;
+    }
+
+    return this.getRepo(transactionManager).find({ where: findWhereOptions });
+  }
+
   public async updateInventoryStatus(
     id: string, 
     status: InventoryStatus,
     transactionManager: EntityManager
   ) {
-    return this.getRepo(transactionManager).save({ id, status });
+    return this.getRepo(transactionManager).save({ id, inventoryStatus: status });
   }
 }

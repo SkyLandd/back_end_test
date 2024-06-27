@@ -118,7 +118,7 @@ export class UserService {
         transactionManager
       );
       await this.userInventoryRepository.updateInventoryStatus(
-        tradeEntity.initiatorInventoryId, 
+        tradeEntity.recepientInventoryId, 
         InventoryStatus.ACTIVE_TRADE, 
         transactionManager
       );
@@ -152,5 +152,13 @@ export class UserService {
 
   public async initiatedTrades(user: IGrantPayload) {
     return this.tradeRepository.findTradeBy({ initiatorUserId: user.id, status: TradeStatus.INITIATED });
+  }
+
+  public async getTradeMarket(user: IGrantPayload) {
+    return this.userInventoryRepository.findBulkInventory({ userId: user.id })
+  }
+
+  public async getTreasures(user: IGrantPayload) {
+    return this.userInventoryRepository.findBulkInventory({ userId: user.id, self: true })
   }
 }
