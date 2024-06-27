@@ -1,0 +1,201 @@
+{
+  "success": true,
+  "message": "OK",
+  "data": {
+    "id": "0b251c35-2993-4ed0-a9c2-45707dc5ef6a",
+    "treasures": [
+      {
+        "treasure": {
+          "createdAt": "2024-06-27T08:28:44.103Z",
+          "updatedAt": "2024-06-27T08:28:44.103Z",
+          "createdBy": null,
+          "updatedBy": null,
+          "id": "6ed27f9b-bf28-4a68-9511-87b476c3ef4f",
+          "name": "Ancient Coin",
+          "type": "COMMON",
+          "isActive": true
+        },
+        "position": {
+          "lat": "40.640129",
+          "long": "-73.865444"
+        }
+      },
+      {
+        "treasure": {
+          "createdAt": "2024-06-27T08:28:44.103Z",
+          "updatedAt": "2024-06-27T08:28:44.103Z",
+          "createdBy": null,
+          "updatedBy": null,
+          "id": "9b3d18c1-365c-44ec-9a9a-45f804875e97",
+          "name": "Golden Ring",
+          "type": "RARE",
+          "isActive": true
+        },
+        "position": {
+          "lat": "40.836380",
+          "long": "-74.152321"
+        }
+      },
+      {
+        "treasure": {
+          "createdAt": "2024-06-27T08:28:44.103Z",
+          "updatedAt": "2024-06-27T08:28:44.103Z",
+          "createdBy": null,
+          "updatedBy": null,
+          "id": "1e7011ff-b32f-4168-9558-c3aa96a8a771",
+          "name": "Mystic Amulet",
+          "type": "EPIC",
+          "isActive": true
+        },
+        "position": {
+          "lat": "40.731913",
+          "long": "-74.078364"
+        }
+      },
+      {
+        "treasure": {
+          "createdAt": "2024-06-27T08:28:44.103Z",
+          "updatedAt": "2024-06-27T08:28:44.103Z",
+          "createdBy": null,
+          "updatedBy": null,
+          "id": "0a476fb4-6e99-44d2-bbe8-a6326fb6152c",
+          "name": "Dragon Egg",
+          "type": "LEGENDARY",
+          "isActive": true
+        },
+        "position": {
+          "lat": "40.667088",
+          "long": "-74.000047"
+        }
+      },
+      {
+        "treasure": {
+          "createdAt": "2024-06-27T08:28:44.103Z",
+          "updatedAt": "2024-06-27T08:28:44.103Z",
+          "createdBy": null,
+          "updatedBy": null,
+          "id": "fc489392-f145-47b2-9f43-f723f93409ae",
+          "name": "Silver Chalice",
+          "type": "COMMON",
+          "isActive": true
+        },
+        "position": {
+          "lat": "40.772336",
+          "long": "-73.833084"
+        }
+      },
+      {
+        "treasure": {
+          "createdAt": "2024-06-27T08:28:44.103Z",
+          "updatedAt": "2024-06-27T08:28:44.103Z",
+          "createdBy": null,
+          "updatedBy": null,
+          "id": "6b961a57-cb64-4990-bba3-7a71afda7bc1",
+          "name": "Jeweled Crown",
+          "type": "RARE",
+          "isActive": true
+        },
+        "position": {
+          "lat": "40.649172",
+          "long": "-74.084525"
+        }
+      },
+      {
+        "treasure": {
+          "createdAt": "2024-06-27T08:28:44.103Z",
+          "updatedAt": "2024-06-27T08:28:44.103Z",
+          "createdBy": null,
+          "updatedBy": null,
+          "id": "7b72a943-bcfc-4289-98bf-4f40efc1538f",
+          "name": "Enchanted Sword",
+          "type": "EPIC",
+          "isActive": true
+        },
+        "position": {
+          "lat": "40.741327",
+          "long": "-73.885019"
+        }
+      },
+      {
+        "treasure": {
+          "createdAt": "2024-06-27T08:28:44.103Z",
+          "updatedAt": "2024-06-27T08:28:44.103Z",
+          "createdBy": null,
+          "updatedBy": null,
+          "id": "29837a64-80ca-4c5b-8289-9c8085643e8a",
+          "name": "Phoenix Feather",
+          "type": "LEGENDARY",
+          "isActive": true
+        },
+        "position": {
+          "lat": "40.675852",
+          "long": "-74.158271"
+        }
+      },
+      {
+        "treasure": {
+          "createdAt": "2024-06-27T08:28:44.103Z",
+          "updatedAt": "2024-06-27T08:28:44.103Z",
+          "createdBy": null,
+          "updatedBy": null,
+          "id": "683992d4-20d6-4845-91d6-cacb8e643270",
+          "name": "Bronze Medal",
+          "type": "COMMON",
+          "isActive": true
+        },
+        "position": {
+          "lat": "40.883551",
+          "long": "-74.026910"
+        }
+      },
+      {
+        "treasure": {
+          "createdAt": "2024-06-27T08:28:44.103Z",
+          "updatedAt": "2024-06-27T08:28:44.103Z",
+          "createdBy": null,
+          "updatedBy": null,
+          "id": "8c23f4fd-d430-4bb8-9e26-dcc238f768be",
+          "name": "Pearl Necklace",
+          "type": "RARE",
+          "isActive": true
+        },
+        "position": {
+          "lat": "40.707274",
+          "long": "-74.023557"
+        }
+      },
+      {
+        "treasure": {
+          "createdAt": "2024-06-27T08:28:44.103Z",
+          "updatedAt": "2024-06-27T08:28:44.103Z",
+          "createdBy": null,
+          "updatedBy": null,
+          "id": "abe171be-5535-4129-95ab-ad2081a5756b",
+          "name": "Magic Staff",
+          "type": "EPIC",
+          "isActive": true
+        },
+        "position": {
+          "lat": "40.619927",
+          "long": "-73.889678"
+        }
+      },
+      {
+        "treasure": {
+          "createdAt": "2024-06-27T08:28:44.103Z",
+          "updatedAt": "2024-06-27T08:28:44.103Z",
+          "createdBy": null,
+          "updatedBy": null,
+          "id": "5bfb2451-8938-4b12-abf4-d5efac7a5856",
+          "name": "Unicorn Horn",
+          "type": "LEGENDARY",
+          "isActive": true
+        },
+        "position": {
+          "lat": "40.752870",
+          "long": "-73.993838"
+        }
+      }
+    ]
+  }
+}

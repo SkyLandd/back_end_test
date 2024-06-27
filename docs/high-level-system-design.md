@@ -2,7 +2,7 @@
 
 The game system (As per scope of the problem statement) consists of the below modules:
 
-### 1. Authentication Module/Service
+### 1. Authentication Module/Service [More about authentication module on this page](authentication-module.md)
 
 **Responsibilities:**
 
@@ -12,7 +12,7 @@ The game system (As per scope of the problem statement) consists of the below mo
 - Password hashing
 - Email verification
 
-### 2. Game Module
+### 2. Game Module [More about game module on this page](game-module.md)
 
 **Responsibilities:**
 
@@ -22,7 +22,7 @@ The game system (As per scope of the problem statement) consists of the below mo
 - Quests and challenges (assumed but not developed - might need another module where game module being an orchestrator)
 - Exploration mechanics (assumed but not developed - might need another module where game module being an orchestrator)
 
-### 3. Treasure Module
+### 3. Treasure Module [More about treasure module on this page](treasure-module.md)
 
 **Responsibilities:**
 
@@ -32,7 +32,7 @@ The game system (As per scope of the problem statement) consists of the below mo
 - Storing treasure attributes (e.g., common, rare, epic, legendary)
 - Daily/weekly limits management on treasure collection
 
-### 4. Player Module
+### 4. User Module [More about user module on this page](user-module.md)
 
 **Responsibilities:**
 
@@ -50,7 +50,7 @@ High Level Architecture and components
 ---
 
 ### High Level Db Schema:
-<img src="Db Schema.png" width="492" height="228" alt="Db Schema">
+<img src="images/Db Schema.png" width="492" height="228" alt="Db Schema">
 
 High Level Db Schema (In Progress)
 ---
@@ -63,22 +63,24 @@ High Level Db Schema (In Progress)
     - `POST /register`
     - `POST /login`
     - `POST /verify-email`
+    - `POST /verify-email/send` (Authenticated)
 - **Security:**
     - JWT for securing endpoints
     - bcrypt for password hashing
     - Email service for sending verification emails
 
+[More about authentication module on this page](authentication-module.md)
+
 ### 2. Game Module
 
 - **Endpoints:**
-    - `GET /maps`  [Not in Scope - Keeping here for a high level completeness - There can be a seperate module also for managing this]
-    - `POST /explore`[Not in Scope - Keeping here for a high level completeness - There can be a seperate module also for managing this]
     - `POST /collect-treasure`
-    - `GET /quests`[Not in Scope - Keeping here for a high level completeness - There can be a seperate module also for managing this]
-    - `POST /complete-quest`[Not in Scope - Keeping here for a high level completeness - There can be a seperate module also for managing this]
+    - `GET /session`
 - **Logic:**
     - Random placement of treasures
     - Handling treasure collections
+
+[More about game module on this page](game-module.md)
 
 ### 3. Treasure Module
 
