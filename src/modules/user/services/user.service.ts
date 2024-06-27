@@ -12,6 +12,8 @@ import { TradeEntity } from '@database/entities/trade.entity';
 import { InventoryStatus } from '../enums/inventory-status.enum';
 import { TradeRepository } from '../repositories/trade.repository';
 import { TradeStatus } from '../enums/trade-status.enum';
+import { UserStatisticsService } from './user-statistics.service';
+import { LeaderboardService } from './leaderboard.service';
 
 @Injectable()
 export class UserService {
@@ -20,6 +22,8 @@ export class UserService {
     private userMapper: UserMapper,
     private userInventoryRepository: UserInventoryRepository,
     private tradeRepository: TradeRepository,
+    private userStatisticsService: UserStatisticsService,
+    private leaderboardService: LeaderboardService
   ) {}
 
   private getLogContext(name: string) {
@@ -196,5 +200,17 @@ export class UserService {
       );
       await this.tradeRepository.save(tradeToUpdate, transactionManager);
     })
+  }
+
+  public async applyTreasureCollectionSideEffects(user: IGrantPayload) {
+    const logContext = this.getLogContext('applyTreasureCollectionSideEffects')
+    try {
+      await Promise.allSettled([
+        this.userStatisticsService.deleteCache(user),
+        this.leaderboardService.deleteCache(),
+      ])
+    } catch(err) {
+      Logger.error(`Error occured ${err} - ${JSON.stringify(err?.response ?? {})}`, logContext);
+    }
   }
 }

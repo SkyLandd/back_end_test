@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { EntityManager, FindOptionsWhere, IsNull, MoreThanOrEqual, Not, Repository } from "typeorm";
 import { InventoryStatus } from "../enums/inventory-status.enum";
+import { UserEntity } from "@database/entities/user.entity";
 
 @Injectable()
 export class UserInventoryRepository {
@@ -74,5 +75,19 @@ export class UserInventoryRepository {
       createdAt: MoreThanOrEqual(fromDate),
       sessionId: Not(IsNull())
     } })
+  }
+
+  public async rankByCount(): Promise<{ userHandle: string, count: number }[]> {
+    const alias = 'userInventory';
+    const userAlias = 'user';
+    const qb = this.getRepo().createQueryBuilder(alias);
+    qb.select(`${userAlias}.handle`, 'userHandle')
+      .addSelect(`COUNT(${alias}.id)`, 'count')
+      .where(`${alias}.inventoryStatus = :inventoryStatus`, { inventoryStatus: InventoryStatus.COLLECTED })
+      .leftJoin(UserEntity, userAlias, `CAST(${userAlias}.id AS varchar) = ${alias}.user_id`)
+      .groupBy(`${userAlias}.handle`)
+      .orderBy(`COUNT(${alias}.id)`, 'DESC')
+    
+    return qb.getRawMany();
   }
 }

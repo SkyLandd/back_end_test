@@ -11,11 +11,12 @@ import { TradeRepository } from './repositories/trade.repository';
 import { UserController } from './controller/user.controller';
 import { UserStatisticsService } from './services/user-statistics.service';
 import { CustomCacheModule } from '@modules/cache/cache.module';
+import { LeaderboardService } from './services/leaderboard.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity, UserInventoryEntity, TradeEntity]), CustomCacheModule],
   controllers: [UserController],
-  providers: [UserRepository, UserService, UserMapper, UserInventoryRepository, TradeRepository, UserStatisticsService],
+  providers: [UserRepository, UserService, UserMapper, UserInventoryRepository, TradeRepository, UserStatisticsService, LeaderboardService],
   exports: [UserService]
 })
 export class UserModule {}

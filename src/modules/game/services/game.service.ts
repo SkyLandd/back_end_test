@@ -58,6 +58,9 @@ export class GameService {
         await this.collectionLimitService.updateCollected(user.id);
         await this.treasureDistributionService.removeTreasure(collectTreasureDto.treasureId, collectTreasureDto.sessionId);
       });
+
+      // Intentionally running in background
+      this.userService.applyTreasureCollectionSideEffects(user);
     } catch(err) {
       Logger.error(`Error while collecting treasure ${JSON.stringify(collectTreasureDto)}`, logContext);
       if (err instanceof HttpException) {

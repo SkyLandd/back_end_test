@@ -7,6 +7,7 @@ import { User } from "@modules/auth/decorators/grant-payload.decorator";
 import { IGrantPayload } from "@common/interfaces/IGrantPayload";
 import { TradeTreasureDto } from "../dtos/trade-treasure.dto";
 import { UserStatisticsService } from "../services/user-statistics.service";
+import { LeaderboardService } from "../services/leaderboard.service";
 
 @ApiTags('User')
 @Controller('user')
@@ -14,7 +15,8 @@ import { UserStatisticsService } from "../services/user-statistics.service";
 export class UserController {
   constructor(
     private userService: UserService,
-    private userStatisticsService: UserStatisticsService
+    private userStatisticsService: UserStatisticsService,
+    private leaderboardService: LeaderboardService,
   ) { }
 
   @Post('/trade-treasure')
@@ -73,5 +75,13 @@ export class UserController {
     @User() user: IGrantPayload,
   ) {
     return this.userStatisticsService.getStatistics(user);
+  }
+
+  @Get('/leaderboard')
+  @UseGuards(JwtGuard)
+  public async getLeaderboard(
+    @User() user: IGrantPayload,
+  ) {
+    return this.leaderboardService.getLeaderboard(user);
   }
 }

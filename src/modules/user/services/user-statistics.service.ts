@@ -44,6 +44,11 @@ export class UserStatisticsService {
     return statistics;
   }
 
+  public async deleteCache(user: IGrantPayload) {
+    const cacheKey = this.getCacheKey(user);
+    await this.cache.del(cacheKey);
+  }
+
   public async updateStatistics(user: IGrantPayload) {
     // Delete existing statistics
     const cacheKey = this.getCacheKey(user);
