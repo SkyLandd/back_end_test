@@ -19,7 +19,7 @@ export class UserInventoryRepository {
     return transactionManager ? transactionManager.getRepository(UserInventoryEntity) : this.userInventoryRepo;
   }
 
-  public async saveTreasure(userInventoryEntity: UserInventoryEntity, transactionManager: EntityManager) {
+  public async saveTreasure(userInventoryEntity: UserInventoryEntity[], transactionManager: EntityManager) {
     return this.getRepo(transactionManager).save(userInventoryEntity);
   }
 
@@ -44,9 +44,7 @@ export class UserInventoryRepository {
       findWhereOptions.userId = Not(filter.userId);
     }
 
-    if (!filter.self) {
-      findWhereOptions.inventoryStatus = InventoryStatus.COLLECTED;
-    }
+    findWhereOptions.inventoryStatus = InventoryStatus.COLLECTED;
 
     return this.getRepo(transactionManager).find({ where: findWhereOptions });
   }

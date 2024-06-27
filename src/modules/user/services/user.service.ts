@@ -1,5 +1,5 @@
 import { IUser, RegisterUserDto } from '@common/dtos/user.dto';
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { UserMapper } from '../user.mapper';
 import { UserEntity } from '@database/entities/user.entity';
@@ -98,7 +98,7 @@ export class UserService {
    */
   public async addTreasure(user: IGrantPayload, treasureDto: CollectTreasureDto, transactionManager: EntityManager) {
     await this.userInventoryRepository.saveTreasure(
-      this.userMapper.toUserInventory(user, treasureDto),
+      [this.userMapper.toUserInventory(user, treasureDto)],
       transactionManager
     )
   }
@@ -111,7 +111,7 @@ export class UserService {
     const tradeEntity = this.userMapper.toTradeEntity(tradeTreasureDto, user);
     const manager = this.userInventoryRepository.getManager();
     await manager.transaction(async (transactionManager) => {
-      await this.validateTradeInitiate(tradeEntity, transactionManager);
+      await this.validateInventoryStatus(tradeEntity, InventoryStatus.COLLECTED, transactionManager);
       await this.userInventoryRepository.updateInventoryStatus(
         tradeEntity.initiatorInventoryId, 
         InventoryStatus.ACTIVE_TRADE, 
@@ -126,12 +126,12 @@ export class UserService {
     })
   }
 
-  private async validateTradeInitiate(tradeEntity: TradeEntity, transactionManager: EntityManager) {
+  private async validateInventoryStatus(tradeEntity: TradeEntity, status: InventoryStatus, transactionManager: EntityManager) {
     const initiatorInventory = await this.userInventoryRepository.findInventoryBy({ 
       id: tradeEntity.initiatorInventoryId, userId: tradeEntity.initiatorUserId
     }, transactionManager)
 
-    if (!initiatorInventory || initiatorInventory.inventoryStatus !== InventoryStatus.COLLECTED) {
+    if (!initiatorInventory || initiatorInventory.inventoryStatus !== status) {
       throw new BadRequestException(`Trade not possible with selected cards`);
     }
 
@@ -139,7 +139,7 @@ export class UserService {
       id: tradeEntity.recepientInventoryId, userId: tradeEntity.recepientUserId 
     }, transactionManager)
 
-    if (!recepientInventory || recepientInventory.inventoryStatus !== InventoryStatus.COLLECTED) {
+    if (!recepientInventory || recepientInventory.inventoryStatus !== status) {
       throw new BadRequestException(`Trade not possible with selected cards`);
     }
 
@@ -160,5 +160,41 @@ export class UserService {
 
   public async getTreasures(user: IGrantPayload) {
     return this.userInventoryRepository.findBulkInventory({ userId: user.id, self: true })
+  }
+
+  public async acceptTrade(tradeId: string, user: IGrantPayload) {
+    const logContext = this.getLogContext(`acceptTrade - ${tradeId}`)
+    const trades = await this.tradeRepository.findTradeBy({ id: tradeId, recepientUserId: user.id });
+    if (!trades?.length) {
+      throw new NotFoundException(`Trade not found`);
+    }
+
+    const currentTrade = trades[0];
+    if (currentTrade.recepientUserId !== user.id) {
+      Logger.error(`CHEATING: User ${user.id} trying to accept someone else's trade`, logContext);
+      throw new NotFoundException(`Trade not found`);
+    }
+
+    // Trade
+    const tradeToUpdate = new TradeEntity()
+    tradeToUpdate.id = tradeId;
+    tradeToUpdate.status = TradeStatus.COMPLETED;
+
+    const tradeManager = this.tradeRepository.getManager();
+    await tradeManager.transaction(async (transactionManager) => {
+      const { initiatorInventory, recepientInventory } = await this.validateInventoryStatus(currentTrade, InventoryStatus.ACTIVE_TRADE, transactionManager);
+      
+      const inventoriesToAddUpdate = this.userMapper.toTradeAcceptedTreasureEntity(currentTrade, initiatorInventory, recepientInventory);
+      await this.userInventoryRepository.saveTreasure(
+        inventoriesToAddUpdate,
+        transactionManager
+      );
+      await this.userInventoryRepository.updateInventoryStatus(
+        currentTrade.recepientInventoryId, 
+        InventoryStatus.TRADED, 
+        transactionManager
+      );
+      await this.tradeRepository.save(tradeToUpdate, transactionManager);
+    })
   }
 }

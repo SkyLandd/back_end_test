@@ -1,5 +1,5 @@
 import { TOKEN_NAME } from "@common/constants/auth";
-import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { UserService } from "../services/user.service";
 import { JwtGuard } from "@modules/auth/guards/jwt.guard";
@@ -54,5 +54,14 @@ export class UserController {
     @User() user: IGrantPayload,
   ) {
     return this.userService.getTreasures(user);
+  }
+
+  @Post('/accept-trade/:tradeId')
+  @UseGuards(JwtGuard)
+  public async acceptTrade(
+    @User() user: IGrantPayload,
+    @Param('tradeId') tradeId: string
+  ) {
+    return this.userService.acceptTrade(tradeId, user);
   }
 }

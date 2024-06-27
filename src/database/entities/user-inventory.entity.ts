@@ -14,7 +14,7 @@ export class UserInventoryEntity extends CustomBaseEntity {
   @Column({ name: 'treasure_id' })
   treasureId: string;
 
-  @Column({ name: 'treasure_position', type: 'jsonb' })
+  @Column({ name: 'treasure_position', type: 'jsonb', nullable: true })
   position: GameCoordinatesDto;
 
   @Column({ name: 'session_id', nullable: true })

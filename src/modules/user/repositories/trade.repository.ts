@@ -23,7 +23,7 @@ export class TradeRepository {
     return this.getRepo(transactionManager).save(tradeEntity);
   }
 
-  public async findTradeBy(filter: { initiatorUserId?: string, recepientUserId?: string, status?: TradeStatus }) {
+  public async findTradeBy(filter: { initiatorUserId?: string, recepientUserId?: string, status?: TradeStatus, id?: string }) {
     const whereOptions: FindOptionsWhere<TradeEntity> = { }
 
     if (filter.initiatorUserId) {
@@ -36,6 +36,10 @@ export class TradeRepository {
 
     if (filter.status) {
       whereOptions.status = filter.status;
+    }
+
+    if (filter.id) {
+      whereOptions.id = filter.id
     }
 
     return this.getRepo().find({ where: whereOptions });

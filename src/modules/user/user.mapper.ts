@@ -6,6 +6,7 @@ import { CollectTreasureDto } from "@modules/game/dtos/treasure-collect.dto";
 import { Injectable } from "@nestjs/common";
 import { TradeTreasureDto } from "./dtos/trade-treasure.dto";
 import { TradeEntity } from "@database/entities/trade.entity";
+import { InventoryStatus } from "./enums/inventory-status.enum";
 
 @Injectable()
 export class UserMapper {
@@ -52,5 +53,35 @@ export class UserMapper {
     tradeEntity.recepientUserId = tradeTreasureDto.recepientUserId;
 
     return tradeEntity;
+  }
+
+  public toTradeAcceptedTreasureEntity(currentTrade: TradeEntity, initiatorInventory: UserInventoryEntity, recepientInventory: UserInventoryEntity) {
+    const tradeId = currentTrade.id;
+
+    // Initiator Treasure
+    const initiatorInventoryToUpdate = new UserInventoryEntity();
+    initiatorInventoryToUpdate.id = currentTrade.initiatorInventoryId;
+    initiatorInventoryToUpdate.inventoryStatus = InventoryStatus.TRADED;
+    initiatorInventoryToUpdate.tradeId = tradeId;
+
+    const initiatorCollectedInventory = new UserInventoryEntity();
+    initiatorCollectedInventory.treasureId = recepientInventory.treasureId;
+    initiatorCollectedInventory.userId = currentTrade.initiatorUserId;
+    initiatorCollectedInventory.inventoryStatus = InventoryStatus.COLLECTED;
+    initiatorCollectedInventory.tradeId = tradeId;
+
+    // Recepient Treasure
+    const recepientCollectedInventory = new UserInventoryEntity();
+    recepientCollectedInventory.treasureId = initiatorInventory.treasureId;
+    recepientCollectedInventory.userId = currentTrade.recepientUserId;
+    recepientCollectedInventory.inventoryStatus = InventoryStatus.COLLECTED;
+    recepientCollectedInventory.tradeId = tradeId;
+
+    const recepientInventoryToUpdate = new UserInventoryEntity();
+    recepientInventoryToUpdate.id = currentTrade.recepientInventoryId;
+    recepientInventoryToUpdate.inventoryStatus = InventoryStatus.TRADED;
+    recepientInventoryToUpdate.tradeId = tradeId;
+
+    return [initiatorInventory, initiatorCollectedInventory, recepientInventory, recepientCollectedInventory];
   }
 }
