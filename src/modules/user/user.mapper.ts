@@ -4,6 +4,8 @@ import { UserInventoryEntity } from "@database/entities/user-inventory.entity";
 import { UserEntity } from "@database/entities/user.entity";
 import { CollectTreasureDto } from "@modules/game/dtos/treasure-collect.dto";
 import { Injectable } from "@nestjs/common";
+import { TradeTreasureDto } from "./dtos/trade-treasure.dto";
+import { TradeEntity } from "@database/entities/trade.entity";
 
 @Injectable()
 export class UserMapper {
@@ -39,5 +41,16 @@ export class UserMapper {
     userInventoryEntity.userId = user.id;
 
     return userInventoryEntity;
+  }
+
+  public toTradeEntity(tradeTreasureDto: TradeTreasureDto, user: IGrantPayload) {
+    const tradeEntity: TradeEntity = new TradeEntity();
+
+    tradeEntity.initiatorInventoryId = tradeTreasureDto.initiatorInventoryId;
+    tradeEntity.initiatorUserId = user.id;
+    tradeEntity.recepientInventoryId = tradeTreasureDto.recepientInventoryId;
+    tradeEntity.recepientUserId = tradeTreasureDto.recepientUserId;
+
+    return tradeEntity;
   }
 }

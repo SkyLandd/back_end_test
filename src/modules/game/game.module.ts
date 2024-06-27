@@ -5,7 +5,6 @@ import { GameService } from "./services/game.service";
 import { TreasureModule } from "@modules/treasure/treasure.module";
 import { UserModule } from "@modules/user/user.module";
 import { CustomCacheModule } from "@modules/cache/cache.module";
-import { CollectionLimitService } from "./services/collection-limit.service";
 import { GameController } from "./controllers/game.controller";
 
 @Module({
@@ -18,7 +17,6 @@ import { GameController } from "./controllers/game.controller";
   providers: [
     UserLocationService,
     TreasureDistributionService,
-    CollectionLimitService,
     GameService
   ],
   exports: [GameService]

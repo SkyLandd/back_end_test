@@ -4,7 +4,7 @@ import { CollectTreasureDto } from "../dtos/treasure-collect.dto";
 import { TreasureDistributionService } from "./treasure-distribution.service";
 import { UserLocationService } from "./user-location.service";
 import { IGrantPayload } from "@common/interfaces/IGrantPayload";
-import { CollectionLimitService } from "./collection-limit.service";
+import { CollectionLimitService } from "../../treasure/services/collection-limit.service";
 import { UserService } from "@modules/user/services/user.service";
 import { EntityManager } from "typeorm";
 import { TreasureService } from "@modules/treasure/services/treasure.service";

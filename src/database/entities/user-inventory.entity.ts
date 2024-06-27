@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { CustomBaseEntity } from "./base.entity";
 import { GameCoordinatesDto } from "@modules/game/dtos/treasure-collect.dto";
+import { InventoryStatus } from "@modules/user/enums/inventory-status.enum";
 
 @Entity({ name: 'user_inventory' })
 export class UserInventoryEntity extends CustomBaseEntity {
@@ -16,9 +17,12 @@ export class UserInventoryEntity extends CustomBaseEntity {
   @Column({ name: 'treasure_position', type: 'jsonb' })
   position: GameCoordinatesDto;
 
-  @Column({ name: 'session_id' })
+  @Column({ name: 'session_id', nullable: true })
   sessionId: string;
 
-  @Column({ name: 'is_traded', default: false })
-  isTraded: boolean;
+  @Column({ name: 'trade_id', nullable: true })
+  tradeId: string;
+
+  @Column({ name: 'status', default: InventoryStatus.COLLECTED })
+  inventoryStatus: InventoryStatus;
 }

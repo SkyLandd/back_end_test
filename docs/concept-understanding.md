@@ -13,7 +13,7 @@ I assume that treasure collection involves players exploring virtual maps to fin
 - **Random Distribution**: Treasures are randomly distributed across different virtual locations. This randomness ensures fairness and replayability.
 - **Daily/Weekly Limits**: Limits are imposed on the number of treasures a player can collect daily and weekly to maintain balance and prevent exploitation. Assuming this is central to the game and not personalized for the players, so in the implementation it will be a setting and will remain same for all players. 
 - **Secure Collection**: The collection process ensures that each treasure can only be collected once per player, preventing duplication or cheating.
-- **Trading of Treasures**: Assuming the trades increase the daily limit of the target player and decreases daily limit of source player, This can be argued and based on game objective it can be decided. I am choosing to keep it consistent with the trade collection logic so that game economy remains consistent and the tradng is not exploited to get an excessive collection of treasures. 
+- **Trading of Treasures**: Assuming the trades do not decrease or increase the daily limit of either participants, This can be argued and based on game objective it can be decided. I am choosing to keep it consistent so that game economy remains consistent and the tradng is not exploited to get an excessive collection of treasures. 
 
 Assuming treasures can be of different types based on their rarity, I am proposing the following categories (inspired by Clash Royale Cards):
 

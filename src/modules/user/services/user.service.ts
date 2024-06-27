@@ -1,5 +1,5 @@
 import { IUser, RegisterUserDto } from '@common/dtos/user.dto';
-import { BadRequestException, ConflictException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { UserMapper } from '../user.mapper';
 import { UserEntity } from '@database/entities/user.entity';
@@ -7,6 +7,11 @@ import { IGrantPayload } from '@common/interfaces/IGrantPayload';
 import { UserInventoryRepository } from '../repositories/user-inventory.repository';
 import { EntityManager } from 'typeorm';
 import { CollectTreasureDto } from '@modules/game/dtos/treasure-collect.dto';
+import { TradeTreasureDto } from '../dtos/trade-treasure.dto';
+import { TradeEntity } from '@database/entities/trade.entity';
+import { InventoryStatus } from '../enums/inventory-status.enum';
+import { TradeRepository } from '../repositories/trade.repository';
+import { TradeStatus } from '../enums/trade-status.enum';
 
 @Injectable()
 export class UserService {
@@ -14,6 +19,7 @@ export class UserService {
     private userRepository: UserRepository,
     private userMapper: UserMapper,
     private userInventoryRepository: UserInventoryRepository,
+    private tradeRepository: TradeRepository,
   ) {}
 
   private getLogContext(name: string) {
@@ -101,4 +107,50 @@ export class UserService {
     return this.userInventoryRepository.getManager();
   }
 
+  public async initiateTrade(tradeTreasureDto: TradeTreasureDto, user: IGrantPayload) {
+    const tradeEntity = this.userMapper.toTradeEntity(tradeTreasureDto, user);
+    const manager = this.userInventoryRepository.getManager();
+    await manager.transaction(async (transactionManager) => {
+      await this.validateTradeInitiate(tradeEntity, transactionManager);
+      await this.userInventoryRepository.updateInventoryStatus(
+        tradeEntity.initiatorInventoryId, 
+        InventoryStatus.ACTIVE_TRADE, 
+        transactionManager
+      );
+      await this.userInventoryRepository.updateInventoryStatus(
+        tradeEntity.initiatorInventoryId, 
+        InventoryStatus.ACTIVE_TRADE, 
+        transactionManager
+      );
+      await this.tradeRepository.save(tradeEntity, transactionManager);
+    })
+  }
+
+  private async validateTradeInitiate(tradeEntity: TradeEntity, transactionManager: EntityManager) {
+    const initiatorInventory = await this.userInventoryRepository.findInventoryBy({ 
+      id: tradeEntity.initiatorInventoryId, userId: tradeEntity.initiatorUserId
+    }, transactionManager)
+
+    if (!initiatorInventory || initiatorInventory.inventoryStatus !== InventoryStatus.COLLECTED) {
+      throw new BadRequestException(`Trade not possible with selected cards`);
+    }
+
+    const recepientInventory = await this.userInventoryRepository.findInventoryBy({ 
+      id: tradeEntity.recepientInventoryId, userId: tradeEntity.recepientUserId 
+    }, transactionManager)
+
+    if (!recepientInventory || recepientInventory.inventoryStatus !== InventoryStatus.COLLECTED) {
+      throw new BadRequestException(`Trade not possible with selected cards`);
+    }
+
+    return { initiatorInventory, recepientInventory };
+  }
+
+  public async requestedTrades(user: IGrantPayload) {
+    return this.tradeRepository.findTradeBy({ recepientUserId: user.id, status: TradeStatus.INITIATED });
+  }
+
+  public async initiatedTrades(user: IGrantPayload) {
+    return this.tradeRepository.findTradeBy({ initiatorUserId: user.id, status: TradeStatus.INITIATED });
+  }
 }
